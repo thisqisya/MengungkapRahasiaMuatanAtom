@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mengungkap Rahasia Muatan Atom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f5fa;--card:#fff;--ink:#14213d;--mute:#5a6580;--line:#d9e0ec;--p:#d9382f;--n:#7b8494;--e:#2f6fdb;--ok:#1f8a4c;--bad:#c0392b;--acc:#14213d;--accInk:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1424;--card:#172038;--ink:#eaf0ff;--mute:#9aa7c7;--line:#2a3654;--p:#ff6b60;--n:#a3acbd;--e:#6ea2ff;--ok:#4cd082;--bad:#ff7b6b;--acc:#eaf0ff;--accInk:#0e1424}}
+:root[data-theme="dark"]{--bg:#0e1424;--card:#172038;--ink:#eaf0ff;--mute:#9aa7c7;--line:#2a3654;--p:#ff6b60;--n:#a3acbd;--e:#6ea2ff;--ok:#4cd082;--bad:#ff7b6b;--acc:#eaf0ff;--accInk:#0e1424}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "Nunito Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.15;margin:0 0 .6em}
+h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:800}h2{font-size:1.7rem;font-weight:800}h3{font-size:1.1rem;font-weight:600}
+main{max-width:920px;margin:0 auto;padding:16px 16px 48px}
+nav{display:flex;gap:6px;overflow-x:auto;padding:8px 0 16px}
+nav button{flex:1 0 auto;background:var(--card);border:1px solid var(--line);color:var(--mute);border-radius:999px;padding:6px 14px;font:600 .85rem "Nunito Sans",sans-serif;cursor:pointer}
+nav button.on{background:var(--acc);color:var(--accInk);border-color:var(--acc)}
+nav button.done{color:var(--ok);border-color:var(--ok)}
+section{display:none;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+section.on{display:block}
+.hero{display:grid;grid-template-columns:1fr 200px;gap:24px;align-items:center}
+@media(max-width:640px){.hero{grid-template-columns:1fr}}
+.atom{position:relative;width:200px;height:200px;margin:auto}
+.atom .nuc{position:absolute;inset:78px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--p) 0 45%,var(--n) 46%)}
+.atom i{position:absolute;inset:0;border:1.5px solid var(--line);border-radius:50%;animation:spin 6s linear infinite}
+.atom i:nth-child(2){inset:22px;animation-duration:4s;animation-direction:reverse}
+.atom i::after{content:"";position:absolute;top:-6px;left:calc(50% - 6px);width:12px;height:12px;border-radius:50%;background:var(--e)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.atom i{animation:none}}
+.pantik{display:flex;gap:16px;font-size:3rem;margin:12px 0}
+.q{border-left:4px solid var(--e);padding:8px 14px;background:color-mix(in srgb,var(--e) 8%,transparent);border-radius:0 8px 8px 0;margin:14px 0}
+.btn{background:var(--acc);color:var(--accInk);border:0;border-radius:10px;padding:11px 20px;font:700 1rem "Nunito Sans",sans-serif;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.sec{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--e);outline-offset:2px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.sim{position:relative;width:100%;aspect-ratio:4/3;min-height:320px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--bg)}
+.sim iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.sim .fb{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:20px;z-index:-1}
+.tw{overflow-x:auto;margin-top:14px}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:center;font-size:.92rem}
+th{background:var(--bg);font-weight:700}
+td input{width:60px;text-align:center;padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit}
+.p{color:var(--p)}.n{color:var(--n)}.e{color:var(--e)}
+.calc{font-weight:700}
+.pill{padding:2px 10px;border-radius:999px;font-size:.8rem;font-weight:700;border:1px solid currentColor}
+.blank{margin:14px 0;line-height:2.2}
+.blank input{width:130px;padding:5px 8px;border:1.5px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit;text-align:center}
+.blank input.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+.blank input.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.msg{font-weight:700;margin-top:10px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+@media(max-width:640px){.g3{grid-template-columns:1fr}}
+.g3>div{border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center}
+.dot{width:56px;height:56px;border-radius:50%;margin:0 auto 8px;display:grid;place-items:center;color:#fff;font:800 1.5rem "Bricolage Grotesque",sans-serif}
+textarea{width:100%;min-height:80px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+small,.mute{color:var(--mute)}
+ol.st{padding-left:20px}
+[hidden]{display:none!important}
+.id{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin:8px 0 4px}
+.id input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+.foot{text-align:center;color:var(--mute);font-size:.85rem;margin-top:20px;line-height:1.5}
+#cpBox{margin-top:10px;min-height:150px;font:.85rem/1.4 ui-monospace,monospace}
+
+/* ===== Responsif v2: HP, tablet, laptop/PC ===== */
+#hd,#bar{display:none}
+.btn:disabled{opacity:.4;cursor:default}
+nav button{display:flex;align-items:center;gap:8px}
+nav .no{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:1.5px solid currentColor;font-size:.75rem;flex:none}
+.explore{display:grid;gap:18px;margin-top:14px}
+.obs h3{margin:0 0 4px}
+.oc{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.oh{grid-column:1/-1;font-weight:700;font-size:.9rem;color:var(--mute)}
+.f{display:flex;flex-direction:column;gap:4px;font-size:.8rem;font-weight:700}
+.f input{width:100%;min-height:44px;padding:6px;font:inherit;font-size:16px;text-align:center;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.rs{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:.9rem}
+.blank input,textarea,.id input{font-size:16px}
+@media (min-width:720px) and (orientation:landscape){.explore{grid-template-columns:minmax(0,1.4fr) minmax(260px,1fr);align-items:start}}
+@media (min-width:1024px){
+ main{max-width:1240px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:24px;padding-top:24px}
+ nav{grid-column:1;grid-row:1/3;position:sticky;top:24px;align-self:start;flex-direction:column;overflow:visible;padding:0}
+ nav button{flex:none;border-radius:12px;padding:10px 12px;font-size:.95rem;text-align:left}
+ section,.foot{grid-column:2}
+ section{padding:32px}
+ .explore{grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);align-items:start}
+ .obs{position:sticky;top:24px;max-height:calc(100vh - 48px);overflow:auto}
+ .hero{grid-template-columns:1fr 280px}
+ .atom{width:260px;height:260px}.atom .nuc{inset:100px}.atom i:nth-child(2){inset:30px}
+ .hint{display:none}
+}
+@media (max-width:719px){
+ nav{display:none}
+ #hd{display:block;position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 8px}
+ #hd b{font-size:.9rem}
+ .pb{height:6px;background:var(--line);border-radius:6px;margin-top:6px;overflow:hidden}
+ .pb i{display:block;height:100%;width:0;background:var(--e);transition:width .25s}
+ main{padding-bottom:96px}
+ section{padding:18px}
+ .pn{display:none}
+ #bar{display:flex;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--card);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+ #bar .btn{flex:1;text-align:center}
+ .btn{min-height:46px}
+ .id{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<main>
+<div id="hd"><b id="hdT"></b><div class="pb"><i id="pbi"></i></div></div>
+<nav id="nav" aria-label="Tahapan belajar"></nav>
+
+<section id="s0" class="on">
+ <div class="hero">
+  <div>
+   <p class="mute" style="margin:0 0 6px">Kimia · Fase E / Kelas X · Struktur Atom</p>
+   <h1>Mengungkap Rahasia Muatan Atom</h1>
+   <div class="pantik" aria-hidden="true"><span>⚡</span><span>🎈</span></div>
+   <p>Saat petir menyambar dan balon menempel di baju setelah digosok, benda-benda itu tiba-tiba bermuatan listrik.</p>
+   <div class="q"><b>Pertanyaan pemantik:</b> Semua benda tersusun atas atom. Dari mana asal muatan listrik pada benda-benda itu?</div>
+   <p class="mute">Sekitar 90 menit. Kamu akan menemukan jawabannya sendiri lewat simulasi.</p>
+  </div>
+  <div class="atom" aria-hidden="true"><i></i><i></i><div class="nuc"></div></div>
+ </div>
+ <div class="row"><button class="btn" data-go="1">Mulai belajar</button></div>
+</section>
+
+<section id="s1">
+ <h2>Rumusan masalah</h2>
+ <div class="q">
+  <p style="margin:0">1. Bagaimana atom yang netral bisa berubah menjadi bermuatan?</p>
+  <p style="margin:0">2. Partikel apa yang bertanggung jawab atas perubahan itu?</p>
+ </div>
+ <h3>Tujuan belajar</h3>
+ <p>Kamu mampu menganalisis hubungan antara jumlah proton, neutron, dan elektron dengan nomor massa dan muatan atom (netral atau ion), menggunakan simulasi PhET Build an Atom.</p>
+ <div class="row"><button class="btn sec" data-go="0">Kembali</button><button class="btn" data-go="2">Lanjut ke eksplorasi</button></div>
+</section>
+
+<section id="s2">
+ <h2>Eksplorasi: bangun atomnya</h2>
+ <ol class="st">
+  <li>Tambah <b class="p">proton</b> satu per satu. Amati nama unsur.</li>
+  <li>Tambah <b class="n">neutron</b>. Amati nomor massa.</li>
+  <li>Tambah atau kurangi <b class="e">elektron</b>. Amati muatan.</li>
+  <li>Catat setiap susunan di tabel pengamatan (minimal 6 atom).</li>
+ </ol>
+ <div class="explore"><div class="simcol"><div class="sim" id="simBox">
+  <div class="fb"><p>Jika simulasi tidak tampil, buka di tab baru.</p><a class="btn" target="_blank" rel="noopener" href="https://phet.colorado.edu/sims/html/build-an-atom/latest/build-an-atom_all.html">Buka PhET Build an Atom</a></div>
+  <iframe title="PhET Build an Atom" loading="lazy" allowfullscreen src="https://phet.colorado.edu/sims/html/build-an-atom/latest/build-an-atom_all.html"></iframe>
+ </div>
+ <div class="row"><button class="btn sec" id="fsBtn">Layar penuh</button></div>
+ <p class="mute hint" style="margin:8px 0 0;font-size:.85rem">Di HP, putar layar ke mode mendatar atau pakai Layar penuh agar simulasi lebih besar.</p>
+ </div>
+ <div class="obs">
+ <h3>Tabel pengamatan</h3>
+ <p class="mute" style="margin:0 0 10px">Isi jumlah partikel dari simulasi. Unsur, nomor massa, dan muatan terhitung otomatis supaya bisa kamu cocokkan dengan layar simulasi.</p>
+ <div id="tb"></div>
+ <div class="row"><button class="btn sec" id="addRow">Tambah atom</button></div>
+ </div></div>
+ <div class="row"><button class="btn sec" data-go="1">Kembali</button><button class="btn" data-go="3">Lanjut ke pengolahan data</button></div>
+</section>
+
+<section id="s3">
+ <h2>Pengolahan data: temukan polanya</h2>
+ <p>Lihat kembali tabelmu, lalu lengkapi kalimat berikut. Jawab dengan satu kata atau frasa singkat.</p>
+ <div id="blanks"></div>
+ <div class="row"><button class="btn" id="chk">Periksa jawaban</button></div>
+ <div class="msg" id="chkMsg" role="status"></div>
+ <div class="row"><button class="btn sec" data-go="2">Kembali</button><button class="btn" data-go="4">Lanjut ke pembuktian</button></div>
+</section>
+
+<section id="s4">
+ <h2>Pembuktian: mainkan Game</h2>
+ <p>Buktikan pemahamanmu di fitur <b>Game</b> pada simulasi. Sistem memberi jumlah partikel, kamu menebak atomnya.</p>
+ <ol class="st">
+  <li>Buka simulasi, pilih menu <b>Game</b>.</li>
+  <li>Selesaikan <b>Level 1</b> dan <b>Level 2</b>.</li>
+  <li>Kejar skor <b>bintang penuh (5)</b>. Target minimal 3 bintang.</li>
+  <li>Catat skormu di bawah.</li>
+ </ol>
+ <a class="btn" target="_blank" rel="noopener" href="https://phet.colorado.edu/sims/html/build-an-atom/latest/build-an-atom_all.html">Buka simulasi (tab baru)</a>
+ <div class="tw"><table style="min-width:0;max-width:420px">
+  <thead><tr><th>Level</th><th>Bintang (0–5)</th></tr></thead>
+  <tbody><tr><td>Level 1</td><td><input id="sc1" type="number" min="0" max="5" aria-label="Skor level 1"></td></tr>
+  <tr><td>Level 2</td><td><input id="sc2" type="number" min="0" max="5" aria-label="Skor level 2"></td></tr></tbody>
+ </table></div>
+ <div class="msg" id="scMsg" role="status"></div>
+ <div class="row"><button class="btn sec" data-go="3">Kembali</button><button class="btn" data-go="5">Lanjut ke kesimpulan</button></div>
+</section>
+
+<section id="s5">
+ <h2>Kesimpulan</h2>
+ <div class="g3">
+  <div><div class="dot" style="background:var(--p)">p⁺</div><h3>Proton</h3><p style="margin:0">Menentukan <b>identitas atom</b> (nama unsur).</p></div>
+  <div><div class="dot" style="background:var(--n)">n</div><h3>Neutron</h3><p style="margin:0">Menambah <b>massa</b> atom.</p></div>
+  <div><div class="dot" style="background:var(--e)">e⁻</div><h3>Elektron</h3><p style="margin:0">Menentukan <b>muatan</b> atom.</p></div>
+ </div>
+ <p><b>Nomor massa = proton + neutron.</b> &nbsp; <b>Muatan = proton − elektron.</b></p>
+ <h3>Refleksi</h3>
+ <p class="mute" style="margin:0 0 8px">Jawab dengan kata-katamu sendiri, lalu tunjukkan ke gurumu.</p>
+ <label for="r1">1. Mengapa balon bisa bermuatan setelah digosok, padahal atomnya awalnya netral?</label>
+ <textarea id="r1"></textarea>
+ <label for="r2" style="display:block;margin-top:10px">2. Jika sebuah atom menambah neutron, apa yang berubah dan apa yang tetap?</label>
+ <textarea id="r2"></textarea>
+ <h3 style="margin-top:22px">Kumpulkan jawabanmu</h3>
+ <p class="mute" style="margin:0">Isi identitasmu, lalu salin ringkasan hasil belajarmu dan kirim sesuai arahan gurumu.</p>
+ <div class="id">
+  <input id="nm" type="text" placeholder="Nama lengkap" aria-label="Nama lengkap" autocomplete="name">
+  <input id="kl" type="text" placeholder="Kelas" aria-label="Kelas">
+ </div>
+ <div class="row">
+  <button class="btn" id="cpBtn">Salin ringkasan hasil</button>
+  <a class="btn sec" id="formBtn" href="#" target="_blank" rel="noopener" hidden>Buka Google Form pengumpulan</a>
+ </div>
+ <div class="msg" id="cpMsg" role="status"></div>
+ <textarea id="cpBox" readonly hidden aria-label="Ringkasan hasil"></textarea>
+ <div class="row"><button class="btn sec" data-go="4">Kembali</button><button class="btn sec" data-go="0">Kembali ke awal</button></div>
+</section>
+<p class="foot">Dirancang dan dikembangkan oleh <b>Fairuz Jihan Balqisya</b> · © 2026<br>Simulasi: PhET Interactive Simulations, University of Colorado Boulder (phet.colorado.edu)</p>
+</main>
+
+<div id="bar"><button class="btn sec" id="bp">Kembali</button><button class="btn" id="bn">Lanjut</button></div>
+<script>
+const EL=["","H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar"];
+const NM=["","Hidrogen","Helium","Litium","Berilium","Boron","Karbon","Nitrogen","Oksigen","Fluor","Neon","Natrium","Magnesium","Aluminium","Silikon","Fosfor","Sulfur","Klor","Argon"];
+const names=["Orientasi","Masalah","Eksplorasi","Pengolahan data","Pembuktian","Kesimpulan"];
+let cur=0;const seen=new Set([0]);
+const nav=document.getElementById("nav");
+function render(){
+ nav.innerHTML="";
+ names.forEach((t,i)=>{const b=document.createElement("button");b.innerHTML='<span class="no">'+(i+1)+'</span><span>'+t+'</span>';b.setAttribute("aria-current",i===cur?"step":"false");
+  b.className=(i===cur?"on":"")+(seen.has(i)&&i!==cur?" done":"");b.onclick=()=>go(i);nav.appendChild(b)});
+ document.querySelectorAll("section").forEach((s,i)=>s.classList.toggle("on",i===cur));
+ document.getElementById("hdT").textContent="Tahap "+(cur+1)+" dari 6 · "+names[cur];document.getElementById("pbi").style.width=((cur+1)/6*100)+"%";bp.disabled=cur===0;bn.textContent=cur===5?"Ke awal":"Lanjut";
+}
+function go(i){cur=i;seen.add(i);render();window.scrollTo({top:0})}
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g)go(+g.dataset.go)});
+
+// Tabel pengamatan
+const tb=document.getElementById("tb");let rc=0;
+function addRow(){
+ rc++;const d=document.createElement("div");d.className="oc";
+ d.innerHTML=`<div class="oh">Atom ${rc}</div>`+[["p","Proton"],["n","Neutron"],["e","Elektron"]].map(([k,l])=>`<label class="f ${k}">${l}<input type="number" inputmode="numeric" min="0" max="20" data-k="${k}"></label>`).join("")+`<div class="rs"><span class="u">–</span><span>Massa <b class="m">–</b></span><span>Muatan <b class="c">–</b></span><span class="s">–</span></div>`;
+ d.addEventListener("input",()=>upd(d));tb.appendChild(d);
+}
+function upd(tr){
+ const v=k=>{const x=tr.querySelector(`[data-k=${k}]`).value;return x===""?null:+x};
+ const p=v("p"),n=v("n"),e=v("e");
+ tr.querySelector(".u").textContent=p==null?"–":(p===0?"(bukan unsur)":`${NM[p]||"?"} (${EL[p]||"?"})`);
+ tr.querySelector(".m").textContent=(p==null||n==null)?"–":p+n;
+ const c=(p==null||e==null)?null:p-e;
+ tr.querySelector(".c").textContent=c==null?"–":(c>0?"+"+c:c);
+ tr.querySelector(".s").innerHTML=c==null?"–":(c===0?'<span class="pill">Netral</span>':c>0?'<span class="pill p">Ion positif</span>':'<span class="pill e">Ion negatif</span>');
+}
+for(let i=0;i<6;i++)addRow();
+document.getElementById("addRow").onclick=addRow;
+
+// Pernyataan rumpang
+const Q=[
+ ["Jumlah <b>{}</b> menentukan identitas (nama unsur) suatu atom.",["proton"]],
+ ["Nomor massa = jumlah proton + jumlah <b>{}</b>.",["neutron"]],
+ ["Atom bersifat netral jika jumlah proton <b>{}</b> jumlah elektron.",["sama","sama dengan","=","setara"]],
+ ["Muatan atom = jumlah proton − jumlah <b>{}</b>.",["elektron"]],
+ ["Atom menjadi ion positif jika jumlah elektronnya <b>{}</b> daripada jumlah proton.",["lebih sedikit","kurang","lebih kecil","lebih rendah","sedikit"]],
+ ["Atom menjadi ion negatif jika jumlah elektronnya <b>{}</b> daripada jumlah proton.",["lebih banyak","lebih","lebih besar","lebih tinggi","banyak"]]
+];
+const bl=document.getElementById("blanks");
+Q.forEach((q,i)=>{const d=document.createElement("div");d.className="blank";
+ d.innerHTML=(i+1)+". "+q[0].replace("{}",`<input type="text" id="b${i}" autocomplete="off" aria-label="Isian ${i+1}">`);bl.appendChild(d)});
+const norm=s=>s.toLowerCase().replace(/\s+/g," ").trim();
+document.getElementById("chk").onclick=()=>{
+ let ok=0;
+ Q.forEach((q,i)=>{const inp=document.getElementById("b"+i);const good=q[1].includes(norm(inp.value));
+  inp.className=good?"ok":"bad";if(good)ok++});
+ const m=document.getElementById("chkMsg");
+ m.style.color=ok===Q.length?"var(--ok)":"var(--bad)";
+ m.textContent=ok===Q.length?"Semua benar. Kamu sudah menemukan pola atom sendiri.":`${ok} dari ${Q.length} benar. Cek kembali tabel pengamatanmu untuk isian yang merah.`;
+};
+
+// Skor game
+function sc(){
+ const a=document.getElementById("sc1").value,b=document.getElementById("sc2").value,m=document.getElementById("scMsg");
+ if(a===""||b===""){m.textContent="";return}
+ const min=Math.min(+a,+b);
+ m.style.color=min>=5?"var(--ok)":min>=3?"var(--e)":"var(--bad)";
+ m.textContent=min>=5?"Luar biasa, bintang penuh di kedua level.":min>=3?"Target minimal tercapai. Coba ulangi untuk meraih bintang 5.":"Belum mencapai 3 bintang. Kembali ke tabel pengamatan dan ulangi Game.";
+}
+["sc1","sc2"].forEach(id=>document.getElementById(id).addEventListener("input",sc));
+
+// Kumpulkan jawaban
+const FORM_URL=""; // GURU: tempel tautan Google Form di antara tanda kutip ini
+if(FORM_URL){const f=document.getElementById("formBtn");f.href=FORM_URL;f.hidden=false}
+function ringkas(){
+ const v=id=>document.getElementById(id).value.trim()||"-";
+ let t=`RINGKASAN LKPD - Mengungkap Rahasia Muatan Atom\nNama: ${v("nm")}\nKelas: ${v("kl")}\n\n[Tabel pengamatan]\nNo | Proton | Neutron | Elektron | Nomor massa | Muatan\n`;
+ [...tb.children].forEach((tr,i)=>{const g=k=>tr.querySelector(`[data-k=${k}]`).value;
+  if(g("p")===""&&g("n")===""&&g("e")==="")return;
+  t+=`${i+1} | ${g("p")||"-"} | ${g("n")||"-"} | ${g("e")||"-"} | ${tr.querySelector(".m").textContent} | ${tr.querySelector(".c").textContent}\n`});
+ t+="\n[Pola atom]\n";
+ Q.forEach((q,i)=>{t+=`${i+1}. ${q[0].replace(/<\/?b>/g,"").replace("{}","["+v("b"+i)+"]")}\n`});
+ t+=`\n[Skor Game]\nLevel 1: ${v("sc1")} bintang\nLevel 2: ${v("sc2")} bintang\n\n[Refleksi]\n1. ${v("r1")}\n2. ${v("r2")}\n`;
+ return t;
+}
+document.getElementById("cpBtn").onclick=async()=>{
+ const t=ringkas(),m=document.getElementById("cpMsg"),box=document.getElementById("cpBox");
+ try{await navigator.clipboard.writeText(t);box.hidden=true;m.style.color="var(--ok)";
+  m.textContent="Ringkasan tersalin. Tempel ke Google Form, LMS, atau WhatsApp gurumu."}
+ catch(e){box.hidden=false;box.value=t;box.select();m.style.color="var(--e)";
+  m.textContent="Browser memblokir salin otomatis. Teks sudah dipilih: tekan Ctrl+C, atau tahan lalu pilih Salin di HP."}
+};
+const bp=document.getElementById("bp"),bn=document.getElementById("bn");
+bp.onclick=()=>go(cur-1);bn.onclick=()=>go(cur===5?0:cur+1);
+document.querySelectorAll("section>.row:last-child").forEach(r=>r.classList.add("pn"));
+const U="https://phet.colorado.edu/sims/html/build-an-atom/latest/build-an-atom_all.html",sm=document.getElementById("simBox"),fb=document.getElementById("fsBtn");
+if(sm.requestFullscreen){fb.onclick=()=>{try{const r=sm.requestFullscreen();if(r&&r.catch)r.catch(()=>window.open(U,"_blank"))}catch(e){window.open(U,"_blank")}}}else{fb.onclick=()=>window.open(U,"_blank");fb.textContent="Buka di tab baru"}
+render();
+</script>
+</body>
+</html>
